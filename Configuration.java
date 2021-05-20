@@ -1,6 +1,7 @@
 public class Configuration {
-    final static int communicationTime = 20;
-    final static int worldWidth = 30;
-    final static int snakeSpeed = 15;
-    final static int snakeBoostSpeed = 20;
+
+    static final int communicationTime = 10;
+    static final int worldWidth = 30;
+    static final int snakeSpeed = 15;
+    static final int snakeBoostSpeed = 20;
 }
