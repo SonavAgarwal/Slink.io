@@ -19,6 +19,8 @@ class ServerHandler {
 
     private Game game;
 
+    private DLList<WorldObject> everything;
+
     public ServerHandler() {
         clientCount = 0;
         game = new Game();
@@ -49,18 +51,21 @@ class ServerHandler {
                         ch.tick();
                     }
 
-                    DLList<WorldObject> everything = game.getEverything();
+                    everything = game.getEverything();
+                    // for (ClientHandler ch : clients) {
 
-                    for (ClientHandler ch : clients) {
-
-                        ch.updateClient(everything);
-                    }
+                    //     ch.updateClient(everything);
+                    // }
                 }
             }
         };
 
         Thread gameUpdateThread = new Thread(gameUpdater);
         gameUpdateThread.start();
+    }
+
+    public DLList<WorldObject> getEverything() {
+        return everything;
     }
 
     public void start() throws IOException {
@@ -136,6 +141,7 @@ class ClientHandler implements Runnable {
                         ClientInput incomingInput;
                         incomingInput = (ClientInput) in.readObject();
                         latestInput = incomingInput;
+                        updateClient(serverHandler.getEverything());
                     }
                 } catch (Exception e) {
                     System.out.println(e);

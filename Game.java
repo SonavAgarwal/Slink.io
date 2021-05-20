@@ -1,12 +1,10 @@
 import java.awt.*;
-import java.io.Console;
 import java.io.Serializable;
 
 public class Game implements Serializable {
 
     private DLList<Snake> snakes;
     private HashMap<Position, GridSquare> grid;
- 
 
     public Game() {
         snakes = new DLList<Snake>();
@@ -14,7 +12,10 @@ public class Game implements Serializable {
 
         for (int i = -Configuration.worldWidth; i <= Configuration.worldWidth; i++) { //TODO think
             for (int j = -Configuration.worldWidth; j <= Configuration.worldWidth; j++) { //TODO think more
-                grid.put(new Position(i * 100, j * 100), new GridSquare(new Position(i * 100, j * 100)));
+                grid.put(
+                    new Position(i * 100, j * 100),
+                    new GridSquare(new Position(i * Configuration.gridSquareWidth, j * Configuration.gridSquareWidth))
+                );
             }
         }
     }
@@ -28,8 +29,31 @@ public class Game implements Serializable {
     }
 
     public void tick() {
+        if (Math.random() < 0.03) {
+            try {
+                Position randomPosition = new Position(
+                    (int) (
+                        Math.random() *
+                        Configuration.worldWidth *
+                        Configuration.gridSquareWidth *
+                        2 -
+                        Configuration.worldWidth *
+                        Configuration.gridSquareWidth
+                    ),
+                    (int) (
+                        Math.random() *
+                        Configuration.worldWidth *
+                        Configuration.gridSquareWidth *
+                        2 -
+                        Configuration.worldWidth *
+                        Configuration.gridSquareWidth
+                    )
+                );
+                grid.get(randomPosition.quantized()).addFood(new Food(randomPosition));
+            } catch (Exception ee) {}
+        }
 
-        grid.get(new Position(0, 0)).addFood(new Food(new Position(10, 10)));
+        // grid.get(new Position(0, 0)).addFood(new Food(new Position(10, 10)));
 
         for (Snake s : snakes) {
             s.tick();
@@ -71,8 +95,8 @@ public class Game implements Serializable {
         DLList<Position> gridSquarePositions = grid.keySet();
         for (Position gsp : gridSquarePositions) {
             // if (gsp.distanceTo(cameraPosition) < 500) {
-                // everything.add(grid.get(gsp));
-                everything.add(grid.get(gsp).getEverything());
+            // everything.add(grid.get(gsp));
+            everything.add(grid.get(gsp).getEverything());
             // }
         }
         return everything;

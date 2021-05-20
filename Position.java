@@ -40,8 +40,8 @@ public class Position implements Serializable {
     }
 
     public Position quantized() {
-        int nx = x / 100 * 100;
-        int ny = x / 100 * 100;
+        int nx = x / Configuration.gridSquareWidth * Configuration.gridSquareWidth;
+        int ny = x / Configuration.gridSquareWidth * Configuration.gridSquareWidth;
 
         return new Position(nx, ny);
     }

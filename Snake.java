@@ -17,22 +17,24 @@ public class Snake implements Serializable {
         addRib(new SnakeRib(new Position(0, 0)));
         addRib(new SnakeRib(new Position(0, -10)));
 
-        size = 2;
+        size = 5;
     }
 
     public void tick() {
         SnakeRib head = snakeRibs.getFirst();
-        
-        Position gridKey = head.getQuantizedPosition();
-        game.getGrid().get(gridKey);
 
+        Position gridKey = head.getQuantizedPosition();
+        GridSquare gs = game.getGrid().get(gridKey);
+        if (gs != null) gs.checkHead(this, head);
         // grid.get(head.getQuantizedPosition());
     }
 
     public void addRib(SnakeRib sr) {
-        snakeRibs.addAtBeginning(sr);
         Position gridKey = sr.getQuantizedPosition();
-        game.getGrid().get(gridKey).addSnakeRib(sr);
+        GridSquare gs = game.getGrid().get(gridKey);
+        if (gs != null) gs.addSnakeRib(sr);
+        // game.getGrid().get(gridKey).addSnakeRib(sr);
+        snakeRibs.addAtBeginning(sr);
     }
 
     public void removeLastRib() {
@@ -44,10 +46,15 @@ public class Snake implements Serializable {
 
     public void handleInput(ClientInput input) {
         Position headPosition = snakeRibs.getFirst().getPosition();
-        Position newPosition = headPosition.copy().applyChange(input.getMouseAngle() + (Math.PI / 2.0), input.getBoost() ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed);
+        Position newPosition = headPosition
+            .copy()
+            .applyChange(
+                input.getMouseAngle() + (Math.PI / 2.0),
+                input.getBoost() ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed
+            );
         SnakeRib newRib = new SnakeRib(newPosition);
         addRib(newRib);
-        if (snakeRibs.size() > 5) removeLastRib();
+        if (snakeRibs.size() > size) removeLastRib();
     }
 
     public void die() {}

@@ -21,7 +21,7 @@ public class Screen extends JPanel implements ActionListener {
         gridTiles = new DLList<GridTile>();
         for (int i = -Configuration.worldWidth; i <= Configuration.worldWidth; i++) { //TODO think
             for (int j = -Configuration.worldWidth; j <= Configuration.worldWidth; j++) { //TODO think more
-                gridTiles.add(new GridTile(new Position(i * 100, j * 100)));
+                gridTiles.add(new GridTile(new Position(i * Configuration.gridSquareWidth, j * Configuration.gridSquareWidth)));
             }
         }
 
@@ -36,16 +36,14 @@ public class Screen extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        
         if (clientUpdateInfo != null) {
             for (GridTile gt : gridTiles) {
                 gt.render(g, clientUpdateInfo.getHeadPosition());
             }
             for (WorldObject wo : clientUpdateInfo.getEverything()) {
-            wo.render(g, clientUpdateInfo.getHeadPosition());
+                wo.render(g, clientUpdateInfo.getHeadPosition());
             }
         }
-
         // if (everything.size() > 0) {
         //     for ()
         // }
@@ -143,7 +141,7 @@ class InputRecorder implements Runnable, MouseListener {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(Configuration.communicationTime);
+                Thread.sleep(Configuration.inputTime);
             } catch (Exception eee) {
                 System.out.println(eee);
             }
