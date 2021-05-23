@@ -29,7 +29,7 @@ public class Game implements Serializable {
     }
 
     public void tick() {
-        if (Math.random() < 0.03) {
+        if (Math.random() < 0.1) {
             try {
                 Position randomPosition = new Position(
                     (int) (
@@ -49,7 +49,9 @@ public class Game implements Serializable {
                         Configuration.gridSquareWidth
                     )
                 );
-                grid.get(randomPosition.quantized()).addFood(new Food(randomPosition));
+                if (randomPosition.distanceTo(new Position(0, 0)) + 100 < Configuration.worldWidth * Configuration.gridSquareWidth) {
+                    grid.get(randomPosition.quantized()).addFood(new Food(randomPosition));
+                }
             } catch (Exception ee) {}
         }
 
