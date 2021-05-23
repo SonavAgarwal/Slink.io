@@ -23,8 +23,8 @@ public class Snake implements Serializable {
         color = new Color((int) (Math.random() * 0x1000000));
 
         headPosition = new Position(0, 0);
-        addRib(new SnakeRib(new Position(0, 0), color));
-        addRib(new SnakeRib(new Position(0, -10), color));
+        addRib(new SnakeRib(new Position(0, 0), color, clientID));
+        addRib(new SnakeRib(new Position(0, -10), color, clientID));
         dead = false;
         size = 15;
     }
@@ -65,14 +65,13 @@ public class Snake implements Serializable {
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
 
-        SnakeRib newRib = new SnakeRib(newPosition, color);
+        SnakeRib newRib = new SnakeRib(newPosition, color, clientID);
         addRib(newRib);
         if (input.getBoost() && size > 10) {
             size--;
             game.addFood(new Food(snakeRibs.getLast().getPosition(), color.brighter(), 1));
         }
 
-        System.out.println(snakeRibs.size());
         while (snakeRibs.size() > (size / 5)) {
             removeLastRib();
         }
