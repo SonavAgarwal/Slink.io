@@ -6,12 +6,16 @@ public class SnakeRib extends WorldObject implements Serializable {
     private Position position;
     private Snake snake;
     private Color color;
-    private int snakeNumber;
+    private int snakeID;
 
     public SnakeRib(Position p, Color c, int sn) {
         position = p;
         color = c;
-        snakeNumber = sn;
+        snakeID = sn;
+    }
+
+    public int getSnakeID() {
+        return snakeID;
     }
 
     @Override

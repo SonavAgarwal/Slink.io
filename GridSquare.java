@@ -45,12 +45,13 @@ public class GridSquare extends WorldObject implements Serializable {
                 snake.grow(f.getValue());
             }
         }
-        // for (SnakeRib sr : snakeRibs) {
-        //     if (headRib.getPosition().distanceTo(f.getPosition()) < 10) {
-        //         foods.remove(f);
-        //         snake.grow(1);
-        //     }
-        // }
+        for (SnakeRib sr : snakeRibs) {
+            if (sr.getSnakeID() != headRib.getSnakeID()) {
+                if (headRib.getPosition().distanceTo(sr.getPosition()) < 10) {
+                    snake.die();
+                }
+            }
+        }
     }
 
     public void render(Graphics g, Position cameraPosition) {
