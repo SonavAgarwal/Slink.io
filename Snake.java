@@ -14,6 +14,8 @@ public class Snake implements Serializable {
 
     private boolean dead;
 
+    private ClientInput lastInput;
+
     public Snake(String n, Game g, int cn) {
         name = n;
         snakeRibs = new DLList<SnakeRib>();
@@ -23,6 +25,8 @@ public class Snake implements Serializable {
         color = new Color((int) (Math.random() * 0x1000000));
 
         headPosition = new Position(0, 0);
+        lastInput = new ClientInput(0, false);
+
         addRib(new SnakeRib(new Position(0, 0), color, clientID));
         addRib(new SnakeRib(new Position(0, -10), color, clientID));
         dead = false;
@@ -58,9 +62,16 @@ public class Snake implements Serializable {
         game.getGrid().get(gridKey).removeSnakeRib(sr);
     }
 
+    public double cap(double number, double min, double max) {
+        if (number > max) return max;
+        if (number < min) return min;
+        return number;
+    }
+
     public void handleInput(ClientInput input) {
         if (dead) return;
-        double ma = input.getMouseAngle() + (Math.PI / 2.0);
+        input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
+        double ma = cap(input.getMouseAngle() - lastInput.getMouseAngle(), -0.2, 0.2) + input.getMouseAngle();
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
@@ -79,6 +90,8 @@ public class Snake implements Serializable {
         //     System.out.println("here");
         //     removeLastRib();
         // }
+
+        lastInput = input;
     }
 
     public void die() {
