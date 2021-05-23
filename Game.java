@@ -53,29 +53,7 @@ public class Game implements Serializable {
 
     public void tick() {
         if (Math.random() < 0.3) {
-            try {
-                Position randomPosition = new Position(
-                    (int) (
-                        Math.random() *
-                        Configuration.worldWidth *
-                        Configuration.gridSquareWidth *
-                        2 -
-                        Configuration.worldWidth *
-                        Configuration.gridSquareWidth
-                    ),
-                    (int) (
-                        Math.random() *
-                        Configuration.worldWidth *
-                        Configuration.gridSquareWidth *
-                        2 -
-                        Configuration.worldWidth *
-                        Configuration.gridSquareWidth
-                    )
-                );
-                if (randomPosition.distanceTo(new Position(0, 0)) + 100 < Configuration.worldWidth * Configuration.gridSquareWidth) {
-                    grid.get(randomPosition.quantized()).addFood(new Food(randomPosition));
-                }
-            } catch (Exception ee) {}
+            spawnFood();
         }
 
         // grid.get(new Position(0, 0)).addFood(new Food(new Position(10, 10)));
@@ -108,7 +86,7 @@ public class Game implements Serializable {
                 )
             );
             if (randomPosition.distanceTo(new Position(0, 0)) + 100 < Configuration.worldWidth * Configuration.gridSquareWidth) {
-                int randomSize = (int) (Math.random() * 3) + 2;
+                int randomSize = (int) (Math.random() * 3 + 2);
                 grid.get(randomPosition.quantized()).addFood(new Food(randomPosition, Color.white, randomSize));
             }
         } catch (Exception ee) {}

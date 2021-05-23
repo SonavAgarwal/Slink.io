@@ -9,6 +9,8 @@ import javax.swing.plaf.FontUIResource;
 public class Screen extends JPanel implements ActionListener {
 
     private Color backgroundColor = new Color(20, 20, 20);
+    private Color fontColor = new Color(77, 77, 77);
+    private Font font = new FontUIResource("Arial", Font.BOLD, 15);
 
     // private Game game;
     // private DLList<WorldObject> everything;
@@ -54,9 +56,9 @@ public class Screen extends JPanel implements ActionListener {
                 wo.render(g, clientUpdateInfo.getHeadPosition());
             }
 
-            g.setColor(Color.black);
-            g.setFont(new FontUIResource("Arial", Font.BOLD, 30));
-            g.drawString("Size: " + clientUpdateInfo.getSize() + ", Position: " + clientUpdateInfo.getHeadPosition().toString(), 10, 40);
+            g.setColor(fontColor);
+            g.setFont(font);
+            g.drawString("Size: " + clientUpdateInfo.getSize() + ", Position: " + clientUpdateInfo.getHeadPosition().toString(), 10, 20);
         }
         // if (everything.size() > 0) {
         //     for ()

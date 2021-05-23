@@ -14,7 +14,8 @@ public class Snake implements Serializable {
 
     private boolean dead;
 
-    private ClientInput lastInput;
+    private double currentAngle;
+    private int lastChangeDirection;
 
     public Snake(String n, Game g, int cn) {
         name = n;
@@ -25,12 +26,13 @@ public class Snake implements Serializable {
         color = new Color((int) (Math.random() * 0x1000000));
 
         headPosition = new Position(0, 0);
-        lastInput = new ClientInput(0, false);
+        currentAngle = 0;
+        lastChangeDirection = 1;
 
         addRib(new SnakeRib(new Position(0, 0), color, clientID));
         addRib(new SnakeRib(new Position(0, -10), color, clientID));
         dead = false;
-        size = 15;
+        size = 30;
     }
 
     public void tick() {
@@ -68,17 +70,37 @@ public class Snake implements Serializable {
         return number;
     }
 
-    public void handleInput(ClientInput input) {
+    public double mod(double a, double b) {
+        double i = a % b;
+        if (i < 0) i += b;
+        return i;
+    }
+
+    public void handleInput(ClientInput in) {
         if (dead) return;
+        ClientInput input = in;
         input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
-        double ma = cap(input.getMouseAngle() - lastInput.getMouseAngle(), -0.2, 0.2) + input.getMouseAngle();
+
+        double pi2 = 2 * Math.PI;
+
+        // System.out.println(mod(-0.5, pi2));
+
+        double dMa = input.getMouseAngle() - currentAngle;
+        dMa = mod(dMa, pi2);
+
+        if (dMa > Math.PI) dMa *= -1;
+
+        dMa = cap(dMa, -0.2, 0.2);
+        // if (dMa > 0) lastChangeDirection = 1; else lastChangeDirection = -1;
+
+        double ma = dMa + currentAngle;
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
 
         SnakeRib newRib = new SnakeRib(newPosition, color, clientID);
         addRib(newRib);
-        if (input.getBoost() && size > 10) {
+        if (input.getBoost() && size > 30) {
             size--;
             game.addFood(new Food(snakeRibs.getLast().getPosition(), color.brighter(), 1));
         }
@@ -91,7 +113,7 @@ public class Snake implements Serializable {
         //     removeLastRib();
         // }
 
-        lastInput = input;
+        currentAngle = ma;
     }
 
     public void die() {
