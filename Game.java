@@ -24,6 +24,10 @@ public class Game implements Serializable {
         snakes.add(s);
     }
 
+    public void removeSnake(Snake s) {
+        snakes.remove(s);
+    }
+
     public HashMap<Position, GridSquare> getGrid() {
         return grid;
     }

@@ -61,4 +61,10 @@ public class Position implements Serializable {
 
         return this;
     }
+
+    public Position shiftRandom(int maxDistance) {
+        x += (int) (Math.random() * 2 * maxDistance - maxDistance);
+        y += (int) (Math.random() * 2 * maxDistance - maxDistance);
+        return this;
+    }
 }

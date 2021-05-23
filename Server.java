@@ -27,6 +27,10 @@ class ServerHandler {
         clients = new DLList<ClientHandler>();
     }
 
+    public Game getGame() {
+        return game;
+    }
+
     public void removeClient(ClientHandler ch) {
         System.out.println(clients.size());
         clients.remove(ch);
@@ -96,6 +100,9 @@ class ClientHandler implements Runnable {
 
     private ClientInput latestInput;
 
+    private int ticksWithoutInput;
+    private boolean connected = false;
+
     public ClientHandler(Socket cs, int cn, ServerHandler sh, Game game) {
         clientSocket = cs;
         clientNumber = cn;
@@ -105,26 +112,42 @@ class ClientHandler implements Runnable {
         game.addSnake(snake);
 
         latestInput = new ClientInput(0, false);
+        ticksWithoutInput = 0;
 
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
             out.writeObject(new Notification(clientNumber + "", "clientID"));
         } catch (Exception e) {
             System.out.println(e);
+            // connected = false;
         }
     }
 
     public void tick() {
-        snake.handleInput(latestInput);
+        // if (!connected) return;
+        ticksWithoutInput++;
+        if (ticksWithoutInput > 100) {
+            serverHandler.removeClient(this);
+            snake.die();
+            serverHandler.getGame().removeSnake(snake);
+        } else {
+            snake.handleInput(latestInput);
+        }
+        // System.out.println("snake tick");
     }
 
     public void updateClient(DLList<WorldObject> everything) {
         try {
             out.reset();
-            ClientUpdateInfo cui = new ClientUpdateInfo(everything, snake.getHeadPosition());
+            ClientUpdateInfo cui = new ClientUpdateInfo();
+            cui.setEverything(everything);
+            cui.setHeadPosition(snake.getHeadPosition());
+            cui.setSize(snake.getSize());
             out.writeObject(cui);
         } catch (Exception e) {
             System.out.println(e);
+            // connected = false;
+            System.out.println("adios");
             serverHandler.removeClient(this);
         }
     }
@@ -141,16 +164,19 @@ class ClientHandler implements Runnable {
                         ClientInput incomingInput;
                         incomingInput = (ClientInput) in.readObject();
                         latestInput = incomingInput;
+                        ticksWithoutInput = 0;
                         updateClient(serverHandler.getEverything());
                     }
                 } catch (Exception e) {
                     System.out.println(e);
+                    System.out.println("bye");
                     serverHandler.removeClient(this);
                     break;
                 }
             }
         } catch (Exception eeee) {
             System.out.println(eeee);
+            System.out.println("zaijian");
             serverHandler.removeClient(this);
         }
     }

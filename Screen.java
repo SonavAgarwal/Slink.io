@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 
 public class Screen extends JPanel implements ActionListener {
 
@@ -43,6 +44,10 @@ public class Screen extends JPanel implements ActionListener {
             for (WorldObject wo : clientUpdateInfo.getEverything()) {
                 wo.render(g, clientUpdateInfo.getHeadPosition());
             }
+
+            g.setColor(Color.black);
+            g.setFont(new FontUIResource("Arial", Font.BOLD, 30));
+            g.drawString("Size: " + clientUpdateInfo.getSize(), 10, 40);
         }
         // if (everything.size() > 0) {
         //     for ()

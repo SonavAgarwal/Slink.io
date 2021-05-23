@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.Serializable;
 
 public class Snake implements Serializable {
@@ -8,6 +9,8 @@ public class Snake implements Serializable {
     private DLList<SnakeRib> snakeRibs;
     private Game game;
 
+    private boolean dead;
+
     public Snake(String n, Game g, int cn) {
         name = n;
         snakeRibs = new DLList<SnakeRib>();
@@ -16,13 +19,13 @@ public class Snake implements Serializable {
 
         addRib(new SnakeRib(new Position(0, 0)));
         addRib(new SnakeRib(new Position(0, -10)));
-
+        dead = false;
         size = 5;
     }
 
     public void tick() {
+        if (dead) return;
         SnakeRib head = snakeRibs.getFirst();
-
         Position gridKey = head.getQuantizedPosition();
         GridSquare gs = game.getGrid().get(gridKey);
         if (gs != null) gs.checkHead(this, head);
@@ -57,7 +60,16 @@ public class Snake implements Serializable {
         if (snakeRibs.size() > size) removeLastRib();
     }
 
-    public void die() {}
+    public void die() {
+        while (snakeRibs.size() > 0) {
+            SnakeRib sr = snakeRibs.getLast();
+            snakeRibs.removeLast();
+            Position gridKey = sr.getQuantizedPosition();
+            GridSquare gs = game.getGrid().get(gridKey);
+            gs.removeSnakeRib(sr);
+            gs.addFood(new Food(sr.getPosition().shiftRandom(20), Color.red));
+        }
+    }
 
     public void grow(int s) {
         size += s;
@@ -69,5 +81,9 @@ public class Snake implements Serializable {
 
     public Position getHeadPosition() {
         return snakeRibs.getFirst().getPosition();
+    }
+
+    public int getSize() {
+        return size;
     }
 }

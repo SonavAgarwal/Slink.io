@@ -16,7 +16,8 @@ public class GridSquare extends WorldObject implements Serializable {
     }
 
     public void addFood(Food f) {
-        if (foods.size() < 1) foods.add(f);
+        // if (foods.size() < 1)
+        foods.add(f);
     }
 
     public void removeFood(Food f) {
