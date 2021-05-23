@@ -113,7 +113,7 @@ public class Snake implements Serializable {
         //     removeLastRib();
         // }
 
-        currentAngle = ma;
+        currentAngle = mod(ma, pi2);
     }
 
     public void die() {
@@ -145,5 +145,9 @@ public class Snake implements Serializable {
 
     public int getSize() {
         return size;
+    }
+
+    public double getCurrentAngle() {
+        return currentAngle;
     }
 }

@@ -58,7 +58,16 @@ public class Screen extends JPanel implements ActionListener {
 
             g.setColor(fontColor);
             g.setFont(font);
-            g.drawString("Size: " + clientUpdateInfo.getSize() + ", Position: " + clientUpdateInfo.getHeadPosition().toString(), 10, 20);
+            g.drawString(
+                "Size: " +
+                clientUpdateInfo.getSize() +
+                ", Position: " +
+                clientUpdateInfo.getHeadPosition().toString() +
+                ", Angle: " +
+                clientUpdateInfo.getSnakeAngle(),
+                10,
+                20
+            );
         }
         // if (everything.size() > 0) {
         //     for ()
