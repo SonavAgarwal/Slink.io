@@ -140,9 +140,9 @@ class ClientHandler implements Runnable {
         try {
             out.reset();
             ClientUpdateInfo cui = new ClientUpdateInfo();
-            cui.setEverything(everything);
             cui.setHeadPosition(snake.getHeadPosition());
             cui.setSize(snake.getSize());
+            cui.setEverything(everything); // last
             out.writeObject(cui);
         } catch (Exception e) {
             System.out.println(e);

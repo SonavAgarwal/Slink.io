@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import java.io.Serializable;
 import java.util.Iterator;
 
 public class DLList<E> implements Iterable<E>, Serializable {
@@ -16,6 +15,20 @@ public class DLList<E> implements Iterable<E>, Serializable {
         tail.setNext(null);
         tail.setPrevious(head);
         size = 0;
+    }
+
+    public DLList(DLList<E> list) {
+        head = new Node<E>(null);
+        tail = new Node<E>(null);
+        head.setNext(tail);
+        head.setPrevious(null);
+        tail.setNext(null);
+        tail.setPrevious(head);
+        size = 0;
+
+        for (E e : list) {
+            add(e);
+        }
     }
 
     public Node<E> getHead() {

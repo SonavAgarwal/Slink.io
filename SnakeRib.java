@@ -14,6 +14,7 @@ public class SnakeRib extends WorldObject implements Serializable {
         snakeNumber = sn;
     }
 
+    @Override
     public Position getPosition() {
         return position;
     }

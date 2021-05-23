@@ -8,6 +8,7 @@ public class Food extends WorldObject implements Serializable {
     private Color color;
     private int value;
 
+    @Override
     public Position getPosition() {
         return position;
     }
