@@ -5,7 +5,7 @@ public class ClientUpdateInfo implements Serializable {
     private DLList<WorldObject> everything;
     private Position headPosition;
     private int size;
-    private double snakeAngle;
+    private HashMap<String, Double> additionalInfo = new HashMap<String, Double>(100);
 
     public void setEverything(DLList<WorldObject> e) {
         this.everything = new DLList<WorldObject>();
@@ -36,11 +36,11 @@ public class ClientUpdateInfo implements Serializable {
         return size;
     }
 
-    public void setSnakeAngle(double snakeAngle) {
-        this.snakeAngle = snakeAngle;
+    public void set(String key, double value) {
+        additionalInfo.put(key, value);
     }
 
-    public double getSnakeAngle() {
-        return snakeAngle;
+    public double get(String key) {
+        return additionalInfo.get(key);
     }
 }

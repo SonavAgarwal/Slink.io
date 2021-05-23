@@ -64,7 +64,9 @@ public class Screen extends JPanel implements ActionListener {
                 ", Position: " +
                 clientUpdateInfo.getHeadPosition().toString() +
                 ", Angle: " +
-                clientUpdateInfo.getSnakeAngle(),
+                clientUpdateInfo.get("snakeAngle") +
+                ", ma: " +
+                clientUpdateInfo.get("mouseAngle"),
                 10,
                 20
             );

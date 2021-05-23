@@ -142,7 +142,8 @@ class ClientHandler implements Runnable {
             ClientUpdateInfo cui = new ClientUpdateInfo();
             cui.setHeadPosition(snake.getHeadPosition());
             cui.setSize(snake.getSize());
-            cui.setSnakeAngle(snake.getCurrentAngle());
+            cui.set("snakeAngle", snake.getCurrentAngle());
+            cui.set("mouseAngle", snake.getMouangsav());
             cui.setEverything(everything); // last
             out.writeObject(cui);
         } catch (Exception e) {

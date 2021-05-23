@@ -15,6 +15,7 @@ public class Snake implements Serializable {
     private boolean dead;
 
     private double currentAngle;
+    private double mouangsav;
     private int lastChangeDirection;
 
     public Snake(String n, Game g, int cn) {
@@ -76,24 +77,45 @@ public class Snake implements Serializable {
         return i;
     }
 
+    public int turnDirection(double current, double target) {
+        double d = target - current;
+        if (d < 0) d += 360;
+        if (d > 180) return -1; // left turn
+        else return 1; // right turn
+    }
+
+    public double getMouangsav() {
+        return mouangsav;
+    }
+
     public void handleInput(ClientInput in) {
         if (dead) return;
-        ClientInput input = in;
-        input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
 
         double pi2 = 2 * Math.PI;
 
-        // System.out.println(mod(-0.5, pi2));
+        ClientInput input = in;
+        // transform input angle
+        input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
+        input.setMouseAngle(mod(input.getMouseAngle(), pi2));
+
+        mouangsav = input.getMouseAngle();
 
         double dMa = input.getMouseAngle() - currentAngle;
+        int direction = 1;
+        // if (dMa < 0) dMa += pi2;
+
         dMa = mod(dMa, pi2);
 
-        if (dMa > Math.PI) dMa *= -1;
+        if (dMa > Math.PI) {
+            direction = -1;
+        }
 
-        dMa = cap(dMa, -0.2, 0.2);
+        // System.out.println(mod(-0.5, pi2));
+
+        dMa = cap(dMa, 0, 0.2);
         // if (dMa > 0) lastChangeDirection = 1; else lastChangeDirection = -1;
 
-        double ma = dMa + currentAngle;
+        double ma = dMa * direction + currentAngle;
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();

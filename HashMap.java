@@ -2,12 +2,19 @@ import java.io.Serializable;
 
 public class HashMap<K, V> implements Serializable {
 
-    private final int size = 1000000000;
+    private int size = 1000000000;
     private DLList<K> keys;
     private V[] table;
 
     @SuppressWarnings("unchecked")
     public HashMap() {
+        keys = new DLList<K>();
+        table = (V[]) new Object[size];
+    }
+
+    @SuppressWarnings("unchecked")
+    public HashMap(int s) {
+        size = s;
         keys = new DLList<K>();
         table = (V[]) new Object[size];
     }
