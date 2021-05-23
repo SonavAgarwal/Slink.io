@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public class HashMap<K, V> implements Serializable {
 
-    private final int size = 1000000;
+    private final int size = 1000000000;
     private DLList<K> keys;
     private V[] table;
 

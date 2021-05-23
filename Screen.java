@@ -8,6 +8,8 @@ import javax.swing.plaf.FontUIResource;
 
 public class Screen extends JPanel implements ActionListener {
 
+    private Color backgroundColor = new Color(20, 20, 20);
+
     // private Game game;
     // private DLList<WorldObject> everything;
     ClientUpdateInfo clientUpdateInfo;
@@ -22,7 +24,11 @@ public class Screen extends JPanel implements ActionListener {
         gridTiles = new DLList<GridTile>();
         for (int i = -Configuration.worldWidth; i <= Configuration.worldWidth; i++) { //TODO think
             for (int j = -Configuration.worldWidth; j <= Configuration.worldWidth; j++) { //TODO think more
+                Position newPos = new Position(i * Configuration.gridSquareWidth, j * Configuration.gridSquareWidth);
+
+                // if (newPos.distanceTo(new Position(0, 0)) < 1000) {
                 gridTiles.add(new GridTile(new Position(i * Configuration.gridSquareWidth, j * Configuration.gridSquareWidth)));
+                // }
             }
         }
 
@@ -37,6 +43,9 @@ public class Screen extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        g.setColor(backgroundColor);
+        g.fillRect(0, 0, 2000, 2000);
+
         if (clientUpdateInfo != null) {
             for (GridTile gt : gridTiles) {
                 gt.render(g, clientUpdateInfo.getHeadPosition());
@@ -47,7 +56,7 @@ public class Screen extends JPanel implements ActionListener {
 
             g.setColor(Color.black);
             g.setFont(new FontUIResource("Arial", Font.BOLD, 30));
-            g.drawString("Size: " + clientUpdateInfo.getSize(), 10, 40);
+            g.drawString("Size: " + clientUpdateInfo.getSize() + ", Position: " + clientUpdateInfo.getHeadPosition().toString(), 10, 40);
         }
         // if (everything.size() > 0) {
         //     for ()
@@ -65,9 +74,11 @@ public class Screen extends JPanel implements ActionListener {
     }
 
     public void poll() throws IOException {
-        String hostName = "localhost";
+        String hostName = "192.168.50.111";
         int portNumber = 1024;
+        System.out.println("x");
         Socket serverSocket = new Socket(hostName, portNumber);
+        System.out.println("y");
 
         ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream());
@@ -94,6 +105,7 @@ public class Screen extends JPanel implements ActionListener {
                 } else if (incoming.getClass() == ClientUpdateInfo.class) {
                     // System.out.println("GOT SOMETHING\n\n");
                     ClientUpdateInfo cui = (ClientUpdateInfo) incoming;
+                    if (cui.getHeadPosition() == null) cui.setHeadPosition(clientUpdateInfo.getHeadPosition());
                     clientUpdateInfo = cui;
                 }
                 repaint();

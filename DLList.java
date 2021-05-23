@@ -35,7 +35,7 @@ public class DLList<E> implements Iterable<E>, Serializable {
         if (size == 0) return null;
         return tail.previous().get();
     }
-    
+
     public void removeLast() {
         if (size == 0) return;
         Node<E> newLast = tail.previous().previous();
@@ -43,7 +43,7 @@ public class DLList<E> implements Iterable<E>, Serializable {
         tail.setPrevious(newLast);
         size--;
     }
-    
+
     public void clear() {
         head.setNext(tail);
         tail.setPrevious(head);
@@ -106,7 +106,7 @@ public class DLList<E> implements Iterable<E>, Serializable {
     }
 
     public void add(int index, E element) {
-        Node<E> newNode = new Node(element);
+        Node<E> newNode = new Node<E>(element);
         Node<E> current = head.next();
         int i = 0;
         while (current.next() != null) {
@@ -130,16 +130,17 @@ public class DLList<E> implements Iterable<E>, Serializable {
         return getNode(index).get();
     }
 
-    public void remove(int index) {
+    public boolean remove(int index) {
         Node<E> current = getNode(index);
         Node<E> before = current.previous();
         Node<E> after = current.next();
         before.setNext(after);
         after.setPrevious(before);
         size--;
+        return true;
     }
 
-    public void remove(E element) {
+    public boolean remove(E element) {
         Node<E> current = head.next();
         while (current != null && current != tail) {
             if (current.get().equals(element)) {
@@ -148,7 +149,7 @@ public class DLList<E> implements Iterable<E>, Serializable {
                 before.setNext(after);
                 after.setPrevious(before);
                 size--;
-                break;
+                return true;
             }
             current = current.next();
         }
@@ -158,6 +159,7 @@ public class DLList<E> implements Iterable<E>, Serializable {
         // }
         // else {
         // }
+        return false;
     }
 
     public void set(int index, E element) {

@@ -32,7 +32,7 @@ public class Position implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31 * x + y;
+        return 10000 * x + y;
     }
 
     public double distanceTo(Position that) {
@@ -40,8 +40,10 @@ public class Position implements Serializable {
     }
 
     public Position quantized() {
-        int nx = x / Configuration.gridSquareWidth * Configuration.gridSquareWidth;
-        int ny = x / Configuration.gridSquareWidth * Configuration.gridSquareWidth;
+        int nx = (int) Math.floor(x / (double) Configuration.gridSquareWidth) * Configuration.gridSquareWidth;
+        int ny = (int) Math.floor(y / (double) Configuration.gridSquareWidth) * Configuration.gridSquareWidth;
+        // int nx = x / Configuration.gridSquareWidth * Configuration.gridSquareWidth;
+        // int ny = y / Configuration.gridSquareWidth * Configuration.gridSquareWidth;
 
         return new Position(nx, ny);
     }

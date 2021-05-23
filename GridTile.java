@@ -2,7 +2,8 @@ import java.awt.*;
 
 public class GridTile extends WorldObject {
 
-    Position position;
+    private Position position;
+    private Color color = new Color(30, 43, 32);
 
     public GridTile(Position p) {
         position = p;
@@ -11,7 +12,7 @@ public class GridTile extends WorldObject {
     public void render(Graphics g, Position cameraPosition) {
         // if (cameraPosition.distanceTo(position) > 300) return;
 
-        g.setColor(Color.green);
+        g.setColor(color);
         Position transformedPosition = Tools.worldToScreenPosition(position, cameraPosition);
         g.drawRect((transformedPosition.getX()), transformedPosition.getY(), Configuration.gridSquareWidth, Configuration.gridSquareWidth);
     }
