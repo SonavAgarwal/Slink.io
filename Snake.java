@@ -88,6 +88,8 @@ public class Snake implements Serializable {
         return mouangsav;
     }
 
+    private double turnable = 0.8;
+
     public void handleInput(ClientInput in) {
         if (dead) return;
 
@@ -112,8 +114,11 @@ public class Snake implements Serializable {
 
         // System.out.println(mod(-0.5, pi2));
 
-        dMa = cap(dMa, 0, 0.2);
+        // dMa *=
+
+        dMa = cap(dMa, 0, turnable);
         // if (dMa > 0) lastChangeDirection = 1; else lastChangeDirection = -1;
+        if (dMa < 0.1) dMa = 0;
 
         double ma = dMa * direction + currentAngle;
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
