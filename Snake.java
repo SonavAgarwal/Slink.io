@@ -97,7 +97,7 @@ public class Snake implements Serializable {
 
         ClientInput input = in;
         // transform input angle
-        // input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
+        input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
         // input.setMouseAngle(mod(input.getMouseAngle(), pi2));
 
         // mouangsav = input.getMouseAngle();
@@ -121,7 +121,7 @@ public class Snake implements Serializable {
         // // if (dMa < 0.1) dMa = 0;
 
         // double ma = dMa * direction + currentAngle;
-        double ma = in.getMouseAngle() + (Math.PI / 2.0);
+        double ma = in.getMouseAngle();
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
