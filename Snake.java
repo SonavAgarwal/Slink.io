@@ -97,30 +97,31 @@ public class Snake implements Serializable {
 
         ClientInput input = in;
         // transform input angle
-        input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
-        input.setMouseAngle(mod(input.getMouseAngle(), pi2));
+        // input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
+        // input.setMouseAngle(mod(input.getMouseAngle(), pi2));
 
-        mouangsav = input.getMouseAngle();
+        // mouangsav = input.getMouseAngle();
 
-        double dMa = input.getMouseAngle() - currentAngle;
-        int direction = 1;
-        // if (dMa < 0) dMa += pi2;
+        // double dMa = input.getMouseAngle() - currentAngle;
+        // int direction = 1;
+        // // if (dMa < 0) dMa += pi2;
 
-        dMa = mod(dMa, pi2);
+        // dMa = mod(dMa, pi2);
 
-        if (dMa > Math.PI) {
-            direction = -1;
-        }
+        // if (dMa > Math.PI) {
+        //     direction = -1;
+        // }
 
-        // System.out.println(mod(-0.5, pi2));
+        // // System.out.println(mod(-0.5, pi2));
 
-        // dMa *=
+        // // dMa *=
 
-        dMa = cap(dMa, 0, turnable);
-        // if (dMa > 0) lastChangeDirection = 1; else lastChangeDirection = -1;
-        // if (dMa < 0.1) dMa = 0;
+        // dMa = cap(dMa, 0, turnable);
+        // // if (dMa > 0) lastChangeDirection = 1; else lastChangeDirection = -1;
+        // // if (dMa < 0.1) dMa = 0;
 
-        double ma = dMa * direction + currentAngle;
+        // double ma = dMa * direction + currentAngle;
+        double ma = in.getMouseAngle() + (Math.PI / 2.0);
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
