@@ -33,7 +33,7 @@ public class Snake implements Serializable {
         addRib(new SnakeRib(new Position(0, 0), color, clientID));
         addRib(new SnakeRib(new Position(0, -10), color, clientID));
         dead = false;
-        size = 30;
+        size = 200;
     }
 
     public void tick() {
@@ -118,7 +118,7 @@ public class Snake implements Serializable {
 
         dMa = cap(dMa, 0, turnable);
         // if (dMa > 0) lastChangeDirection = 1; else lastChangeDirection = -1;
-        if (dMa < 0.1) dMa = 0;
+        // if (dMa < 0.1) dMa = 0;
 
         double ma = dMa * direction + currentAngle;
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
