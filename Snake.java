@@ -18,6 +18,9 @@ public class Snake implements Serializable {
     private double mouangsav;
     private int lastChangeDirection;
 
+    private int maxSpeed;
+    private double maxTurn;
+
     public Snake(String n, Game g, int cn) {
         name = n;
         snakeRibs = new DLList<SnakeRib>();
@@ -99,7 +102,7 @@ public class Snake implements Serializable {
             direction = -1;
         }
 
-        dMa = cap(dMa, -0.1, 0.10);
+        dMa = cap(dMa, 0, maxTurn);
 
         // ClientInput input = in;
         // transform input angle
@@ -120,7 +123,7 @@ public class Snake implements Serializable {
 
         double ma = dMa * direction + currentAngle;
         // double ma = input.getMouseAngle() + (Math.PI / 2.0);
-        int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
+        int dist = maxSpeed + (input.getBoost() && size > 30 ? 2 : 0);
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
 
@@ -142,6 +145,20 @@ public class Snake implements Serializable {
         mouangsav = ma;
 
         currentAngle = ma;
+    }
+
+    public void setMaxSpeed() {
+        int speed = Configuration.snakeSpeed;
+        speed -= size / 250;
+        if (speed < 4) speed = 4;
+        maxSpeed = speed;
+    }
+
+    public void setMaxTurn() {
+        double turn = 0.3;
+        turn -= size / 5000.0;
+        if (turn < 0.03) turn = 0.03;
+        maxTurn = turn;
     }
 
     public void die() {
@@ -171,10 +188,16 @@ public class Snake implements Serializable {
         addRib(new SnakeRib(new Position(0, -10), color, clientID));
         dead = false;
         size = 200;
+
+        setMaxSpeed();
+        setMaxTurn();
     }
 
     public void grow(int s) {
         size += s;
+
+        setMaxTurn();
+        setMaxSpeed();
     }
 
     public int getClientID() {

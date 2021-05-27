@@ -13,6 +13,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     private Font font = new FontUIResource("Arial", Font.BOLD, 15);
 
     private JButton playButton;
+    private JTextField nameInput;
 
 
     ObjectOutputStream out = null;
@@ -50,6 +51,13 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
         playButton.addActionListener(this);
         playButton.setVisible(true);
 
+        nameInput = new JTextField();
+        nameInput.setFont(new Font("Arial", Font.PLAIN, 20));
+        nameInput.setHorizontalAlignment(SwingConstants.CENTER);
+        nameInput.setBounds(310, 186, 200, 30);
+        nameInput.setText("Name...");
+        this.add(nameInput);
+
         // frame.addComponentListener(new ComponentAdapter() {
         //     public void componentResized(ComponentEvent componentEvent) {
         //         // do stuff
@@ -74,8 +82,14 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
         g.fillRect(0, 0, 2000, 2000);
 
         if (clientUpdateInfo != null) {
-            if (clientUpdateInfo.getDead()) playButton.setVisible(true);
-            else playButton.setVisible(false);
+            if (clientUpdateInfo.getDead()) {
+                playButton.setVisible(true);
+                nameInput.setVisible(true);
+            }
+            else {
+                playButton.setVisible(false);
+                nameInput.setVisible(false);
+            } 
             for (GridTile gt : gridTiles) {
                 gt.render(g, clientUpdateInfo.getHeadPosition());
             }
@@ -108,7 +122,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == playButton) {
-            sendServerUpdate(new ServerUpdateInfo(2));
+            name = nameInput.getText();
+            sendServerUpdate(new ServerUpdateInfo(2, name));
         }
     }
 
@@ -205,6 +220,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyChar() == 'd') {
             sendServerUpdate(new ServerUpdateInfo(1));
+        } else if (e.getKeyChar() == 'g') {
+            sendServerUpdate(new ServerUpdateInfo(3));
         }
     }
 

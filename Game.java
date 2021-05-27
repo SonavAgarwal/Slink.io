@@ -65,7 +65,7 @@ public class Game implements Serializable {
     }
 
     public void spawnFood() {
-        if (foodCount > 200) return;
+        if (foodCount > 500) return;
         try {
             Position randomPosition = new Position(
                 (int) (
