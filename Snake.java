@@ -90,14 +90,14 @@ public class Snake implements Serializable {
 
     private double turnable = 0.8;
 
-    public void handleInput(ClientInput in) {
+    public void handleInput(ClientInput input) {
         if (dead) return;
 
-        double pi2 = 2 * Math.PI;
+        // double pi2 = 2 * Math.PI;
 
-        ClientInput input = in;
+        // ClientInput input = in;
         // transform input angle
-        input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
+        // input.setMouseAngle(input.getMouseAngle() + (Math.PI / 2.0));
         // input.setMouseAngle(mod(input.getMouseAngle(), pi2));
 
         // mouangsav = input.getMouseAngle();
@@ -121,7 +121,7 @@ public class Snake implements Serializable {
         // // if (dMa < 0.1) dMa = 0;
 
         // double ma = dMa * direction + currentAngle;
-        double ma = in.getMouseAngle();
+        double ma = input.getMouseAngle() + (Math.PI / 2.0);
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
@@ -141,18 +141,20 @@ public class Snake implements Serializable {
         //     removeLastRib();
         // }
 
-        currentAngle = mod(ma, pi2);
+        mouangsav = ma;
+
+        currentAngle = ma;
     }
 
     public void die() {
         dead = true;
         while (snakeRibs.size() > 0) {
-            System.out.println("Snake is dying");
+            // System.out.println("Snake is dying");
             SnakeRib sr = snakeRibs.getLast();
             snakeRibs.removeLast();
             Position gridKey = sr.getQuantizedPosition();
-            System.out.println(sr.getPosition());
-            System.out.println(sr.getQuantizedPosition());
+            // System.out.println(sr.getPosition());
+            // System.out.println(sr.getQuantizedPosition());
             GridSquare gs = game.getGrid().get(gridKey);
             gs.removeSnakeRib(sr);
             gs.addFood(new Food(sr.getPosition().shiftRandom(20), color.brighter(), 4));

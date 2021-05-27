@@ -225,6 +225,7 @@ class InputRecorder implements Runnable, MouseListener {
             SwingUtilities.convertPointFromScreen(p, jPanel);
 
             double angle = Math.atan2(p.getX() - 400, p.getY() - 250);
+            System.out.println(angle);
             cin.setMouseAngle(angle);
 
             try {
