@@ -147,9 +147,12 @@ public class Snake implements Serializable {
     public void die() {
         dead = true;
         while (snakeRibs.size() > 0) {
+            System.out.println("Snake is dying");
             SnakeRib sr = snakeRibs.getLast();
             snakeRibs.removeLast();
             Position gridKey = sr.getQuantizedPosition();
+            System.out.println(sr.getPosition());
+            System.out.println(sr.getQuantizedPosition());
             GridSquare gs = game.getGrid().get(gridKey);
             gs.removeSnakeRib(sr);
             gs.addFood(new Food(sr.getPosition().shiftRandom(20), color.brighter(), 4));

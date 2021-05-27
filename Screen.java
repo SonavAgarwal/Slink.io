@@ -2,16 +2,18 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
+// import java.util.*;
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 
-public class Screen extends JPanel implements ActionListener {
+public class Screen extends JPanel implements ActionListener, KeyListener {
 
     private Color backgroundColor = new Color(20, 20, 20);
     private Color fontColor = new Color(77, 77, 77);
     private Font font = new FontUIResource("Arial", Font.BOLD, 15);
 
+
+    ObjectOutputStream out = null;
     // private Game game;
     // private DLList<WorldObject> everything;
     ClientUpdateInfo clientUpdateInfo;
@@ -43,6 +45,8 @@ public class Screen extends JPanel implements ActionListener {
         //         componentEvent.
         //     }
         // });
+
+        this.addKeyListener(this);
 
         this.setFocusable(true);
     }
@@ -99,13 +103,13 @@ public class Screen extends JPanel implements ActionListener {
     }
 
     public void poll() throws IOException {
-        String hostName = "10.0.0.238";
+        String hostName = "10.210.66.64";
         int portNumber = 1024;
         System.out.println("x");
         Socket serverSocket = new Socket(hostName, portNumber);
         System.out.println("y");
 
-        ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
+        out = new ObjectOutputStream(serverSocket.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream());
 
         System.out.println("Success");
@@ -166,6 +170,31 @@ public class Screen extends JPanel implements ActionListener {
         //     System.out.println(e);
         // }
     }
+
+
+    public void sendServerUpdate(ServerUpdateInfo sui) {
+        try {
+            out.writeObject(sui);
+        } catch (Exception ee) {
+            System.out.println(ee);
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+    
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyChar() == 'd') {
+            sendServerUpdate(new ServerUpdateInfo(1));
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
 }
 
 class InputRecorder implements Runnable, MouseListener {

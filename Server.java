@@ -163,11 +163,20 @@ class ClientHandler implements Runnable {
             while (true) {
                 try {
                     if (pin.available() != 0) {
-                        ClientInput incomingInput;
-                        incomingInput = (ClientInput) in.readObject();
-                        latestInput = incomingInput;
-                        ticksWithoutInput = 0;
-                        updateClient(serverHandler.getEverything());
+                        Object incoming = in.readObject();
+                        if (incoming.getClass() == ClientInput.class) {
+                            ClientInput incomingInput = (ClientInput) incoming;
+                            latestInput = incomingInput;
+                            ticksWithoutInput = 0;
+                            updateClient(serverHandler.getEverything());
+                        } else if (incoming.getClass() == ServerUpdateInfo.class) {
+                            ServerUpdateInfo sui = (ServerUpdateInfo) incoming;
+
+                            if (sui.getAction() == 1) {
+                                snake.die();
+                            }
+                        }
+
                     }
                 } catch (Exception e) {
                     System.out.println(e);
