@@ -7,11 +7,13 @@ public class SnakeRib extends WorldObject implements Serializable {
     private Snake snake;
     private Color color;
     private int snakeID;
+    private int thickness;
 
-    public SnakeRib(Position p, Color c, int sn) {
+    public SnakeRib(Position p, Color c, int sn, int t) {
         position = p;
         color = c;
         snakeID = sn;
+        thickness = t;
     }
 
     public int getSnakeID() {
@@ -52,6 +54,6 @@ public class SnakeRib extends WorldObject implements Serializable {
     public void render(Graphics g, Position cameraPosition) {
         Position transformedPosition = Tools.worldToScreenPosition(position, cameraPosition);
         g.setColor(color);
-        g.fillOval(transformedPosition.getX() - 20, transformedPosition.getY() - 20, 40, 40);
+        g.fillOval(transformedPosition.getX() - thickness, transformedPosition.getY() - thickness, thickness * 2, thickness * 2);
     }
 }

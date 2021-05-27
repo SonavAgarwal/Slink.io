@@ -111,8 +111,6 @@ public class Snake implements Serializable {
 
         // mouangsav = input.getMouseAngle();
 
-
-
         // // System.out.println(mod(-0.5, pi2));
 
         // // dMa *=
@@ -127,7 +125,7 @@ public class Snake implements Serializable {
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
 
-        SnakeRib newRib = new SnakeRib(newPosition, color, clientID);
+        SnakeRib newRib = new SnakeRib(newPosition, color, clientID, getThickness());
         addRib(newRib);
         if (input.getBoost() && size > 30) {
             size--;
@@ -184,8 +182,8 @@ public class Snake implements Serializable {
         currentAngle = 0;
         lastChangeDirection = 1;
 
-        addRib(new SnakeRib(new Position(0, 0), color, clientID));
-        addRib(new SnakeRib(new Position(0, -10), color, clientID));
+        addRib(new SnakeRib(new Position(0, 0), color, clientID, 20));
+        addRib(new SnakeRib(new Position(0, -10), color, clientID, 20));
         dead = false;
         size = 200;
 
@@ -198,6 +196,15 @@ public class Snake implements Serializable {
 
         setMaxTurn();
         setMaxSpeed();
+    }
+
+    public SnakeName getNameObject() {
+        if (dead) return null;
+        return new SnakeName(name, getHeadPosition());
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getClientID() {
@@ -216,6 +223,10 @@ public class Snake implements Serializable {
 
     public int getSize() {
         return size;
+    }
+
+    public int getThickness() {
+        return (size / 20) + 5;
     }
 
     public double getCurrentAngle() {

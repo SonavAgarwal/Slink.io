@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public class Configuration {
 
     static final int communicationTime = 30;
@@ -6,4 +8,6 @@ public class Configuration {
     static final int gridSquareWidth = 100;
     static final int snakeSpeed = 8;
     static final int snakeBoostSpeed = 8;
+
+    static final Font nameFont = new Font("Arial", Font.PLAIN, 20);
 }

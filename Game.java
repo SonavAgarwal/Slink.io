@@ -130,6 +130,9 @@ public class Game implements Serializable {
             everything.add(grid.get(gsp).getEverything());
             // }
         }
+        for (Snake s : snakes) {
+            if (!s.getDead()) everything.add(s.getNameObject());
+        }
         return everything;
     }
 

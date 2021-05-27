@@ -177,11 +177,11 @@ class ClientHandler implements Runnable {
                                 snake.die();
                             } else if (sui.getAction() == 2) {
                                 snake.spawn();
+                                snake.setName(sui.getMessage());
                             } else if (sui.getAction() == 3) {
                                 snake.grow(20);
                             }
                         }
-
                     }
                 } catch (Exception e) {
                     System.out.println(e);

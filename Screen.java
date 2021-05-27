@@ -10,11 +10,10 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
 
     private Color backgroundColor = new Color(20, 20, 20);
     private Color fontColor = new Color(77, 77, 77);
-    private Font font = new FontUIResource("Arial", Font.BOLD, 15);
+    private Font font = new Font("Arial", Font.BOLD, 15);
 
     private JButton playButton;
     private JTextField nameInput;
-
 
     ObjectOutputStream out = null;
     // private Game game;
@@ -85,11 +84,10 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
             if (clientUpdateInfo.getDead()) {
                 playButton.setVisible(true);
                 nameInput.setVisible(true);
-            }
-            else {
+            } else {
                 playButton.setVisible(false);
                 nameInput.setVisible(false);
-            } 
+            }
             for (GridTile gt : gridTiles) {
                 gt.render(g, clientUpdateInfo.getHeadPosition());
             }
@@ -203,7 +201,6 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
         // }
     }
 
-
     public void sendServerUpdate(ServerUpdateInfo sui) {
         try {
             out.writeObject(sui);
@@ -213,9 +210,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
-    
+    public void keyTyped(KeyEvent e) {}
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyChar() == 'd') {
@@ -226,9 +222,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
+    public void keyReleased(KeyEvent e) {}
 }
 
 class InputRecorder implements Runnable, MouseListener {
