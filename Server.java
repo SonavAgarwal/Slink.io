@@ -127,9 +127,9 @@ class ClientHandler implements Runnable {
         // if (!connected) return;
         ticksWithoutInput++;
         if (ticksWithoutInput > 100) {
-            serverHandler.removeClient(this);
+            // serverHandler.removeClient(this);
             snake.die();
-            serverHandler.getGame().removeSnake(snake);
+            // serverHandler.getGame().removeSnake(snake);
         } else {
             snake.handleInput(latestInput);
         }
@@ -142,6 +142,7 @@ class ClientHandler implements Runnable {
             ClientUpdateInfo cui = new ClientUpdateInfo();
             cui.setHeadPosition(snake.getHeadPosition());
             cui.setSize(snake.getSize());
+            cui.setDead(snake.getDead());
             cui.set("snakeAngle", snake.getCurrentAngle());
             cui.set("mouseAngle", snake.getMouangsav());
             cui.setEverything(everything); // last
@@ -174,6 +175,8 @@ class ClientHandler implements Runnable {
 
                             if (sui.getAction() == 1) {
                                 snake.die();
+                            } else if (sui.getAction() == 2) {
+                                snake.spawn();
                             }
                         }
 

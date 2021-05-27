@@ -54,20 +54,20 @@ public class GridSquare extends WorldObject implements Serializable {
         }
     }
 
-    public void render(Graphics g, Position cameraPosition) {
-        // if (position.distanceTo(cameraPosition) > 200) return;
+    // public void render(Graphics g, Position cameraPosition) {
+    //     // if (position.distanceTo(cameraPosition) > 200) return;
 
-        g.setColor(Color.green);
-        Position transformedPosition = Tools.worldToScreenPosition(position, cameraPosition);
-        g.drawRect((transformedPosition.getX()), transformedPosition.getY(), 100, 100);
+    //     g.setColor(Color.green);
+    //     Position transformedPosition = Tools.worldToScreenPosition(position, cameraPosition);
+    //     g.drawRect((transformedPosition.getX()), transformedPosition.getY(), 100, 100);
 
-        for (SnakeRib sr : snakeRibs) {
-            sr.render(g, cameraPosition);
-        }
-        for (Food f : foods) {
-            f.render(g, cameraPosition);
-        }
-    }
+    //     for (SnakeRib sr : snakeRibs) {
+    //         sr.render(g, cameraPosition);
+    //     }
+    //     for (Food f : foods) {
+    //         f.render(g, cameraPosition);
+    //     }
+    // }
 
     @Override
     public String toString() {

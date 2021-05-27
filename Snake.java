@@ -24,16 +24,9 @@ public class Snake implements Serializable {
         game = g;
         clientID = cn;
 
-        color = new Color((int) (Math.random() * 0x1000000));
-
         headPosition = new Position(0, 0);
-        currentAngle = 0;
-        lastChangeDirection = 1;
-
-        addRib(new SnakeRib(new Position(0, 0), color, clientID));
-        addRib(new SnakeRib(new Position(0, -10), color, clientID));
-        dead = false;
-        size = 200;
+        dead = true;
+        // spawn();
     }
 
     public void tick() {
@@ -93,7 +86,20 @@ public class Snake implements Serializable {
     public void handleInput(ClientInput input) {
         if (dead) return;
 
-        // double pi2 = 2 * Math.PI;
+        double pi2 = 2 * Math.PI;
+
+        double transformedAngle = input.getMouseAngle() + (Math.PI / 2.0);
+        transformedAngle = mod(transformedAngle, pi2);
+
+        double dMa = transformedAngle - currentAngle;
+        int direction = 1;
+
+        dMa = mod(dMa, pi2);
+        if (dMa > Math.PI) {
+            direction = -1;
+        }
+
+        dMa = cap(dMa, -0.1, 0.10);
 
         // ClientInput input = in;
         // transform input angle
@@ -102,15 +108,7 @@ public class Snake implements Serializable {
 
         // mouangsav = input.getMouseAngle();
 
-        // double dMa = input.getMouseAngle() - currentAngle;
-        // int direction = 1;
-        // // if (dMa < 0) dMa += pi2;
 
-        // dMa = mod(dMa, pi2);
-
-        // if (dMa > Math.PI) {
-        //     direction = -1;
-        // }
 
         // // System.out.println(mod(-0.5, pi2));
 
@@ -120,8 +118,8 @@ public class Snake implements Serializable {
         // // if (dMa > 0) lastChangeDirection = 1; else lastChangeDirection = -1;
         // // if (dMa < 0.1) dMa = 0;
 
-        // double ma = dMa * direction + currentAngle;
-        double ma = input.getMouseAngle() + (Math.PI / 2.0);
+        double ma = dMa * direction + currentAngle;
+        // double ma = input.getMouseAngle() + (Math.PI / 2.0);
         int dist = input.getBoost() && size > 10 ? Configuration.snakeBoostSpeed : Configuration.snakeSpeed;
         headPosition.applyChange(ma, dist);
         Position newPosition = headPosition.copy();
@@ -162,12 +160,29 @@ public class Snake implements Serializable {
         }
     }
 
+    public void spawn() {
+        color = new Color((int) (Math.random() * 0x1000000));
+
+        headPosition = new Position(0, 0);
+        currentAngle = 0;
+        lastChangeDirection = 1;
+
+        addRib(new SnakeRib(new Position(0, 0), color, clientID));
+        addRib(new SnakeRib(new Position(0, -10), color, clientID));
+        dead = false;
+        size = 200;
+    }
+
     public void grow(int s) {
         size += s;
     }
 
     public int getClientID() {
         return clientID;
+    }
+
+    public boolean getDead() {
+        return dead;
     }
 
     public Position getHeadPosition() {

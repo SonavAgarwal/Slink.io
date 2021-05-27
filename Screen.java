@@ -12,6 +12,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     private Color fontColor = new Color(77, 77, 77);
     private Font font = new FontUIResource("Arial", Font.BOLD, 15);
 
+    private JButton playButton;
+
 
     ObjectOutputStream out = null;
     // private Game game;
@@ -39,6 +41,15 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
 
         map = new MiniMap();
 
+        playButton = new JButton();
+        playButton.setFont(new Font("Arial", Font.BOLD, 20));
+        playButton.setHorizontalAlignment(SwingConstants.CENTER);
+        playButton.setBounds(310, 228, 200, 30);
+        playButton.setText("Play!");
+        this.add(playButton);
+        playButton.addActionListener(this);
+        playButton.setVisible(true);
+
         // frame.addComponentListener(new ComponentAdapter() {
         //     public void componentResized(ComponentEvent componentEvent) {
         //         // do stuff
@@ -63,6 +74,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
         g.fillRect(0, 0, 2000, 2000);
 
         if (clientUpdateInfo != null) {
+            if (clientUpdateInfo.getDead()) playButton.setVisible(true);
+            else playButton.setVisible(false);
             for (GridTile gt : gridTiles) {
                 gt.render(g, clientUpdateInfo.getHeadPosition());
             }
@@ -93,7 +106,11 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
         // if (game != null) game.render(g, clientID);
     }
 
-    public void actionPerformed(ActionEvent e) {}
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == playButton) {
+            sendServerUpdate(new ServerUpdateInfo(2));
+        }
+    }
 
     public void recordInput(ObjectOutputStream out) {
         Runnable inputRecorder = new InputRecorder(this, out);
@@ -225,7 +242,7 @@ class InputRecorder implements Runnable, MouseListener {
             SwingUtilities.convertPointFromScreen(p, jPanel);
 
             double angle = Math.atan2(p.getX() - 400, p.getY() - 250);
-            System.out.println(angle);
+            // System.out.println(angle);
             cin.setMouseAngle(angle);
 
             try {

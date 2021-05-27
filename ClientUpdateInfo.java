@@ -4,6 +4,7 @@ public class ClientUpdateInfo implements Serializable {
 
     private DLList<WorldObject> everything;
     private Position headPosition;
+    private boolean dead;
     private int size;
     private HashMap<String, Double> additionalInfo = new HashMap<String, Double>(100);
 
@@ -34,6 +35,14 @@ public class ClientUpdateInfo implements Serializable {
 
     public int getSize() {
         return size;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public boolean getDead() {
+        return dead;
     }
 
     public void set(String key, double value) {
