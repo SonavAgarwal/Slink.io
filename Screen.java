@@ -19,6 +19,7 @@ public class Screen extends JPanel implements ActionListener {
     private int clientID;
 
     private DLList<GridTile> gridTiles;
+    private MiniMap map;
 
     public Screen() {
         setLayout(null);
@@ -33,6 +34,15 @@ public class Screen extends JPanel implements ActionListener {
                 // }
             }
         }
+
+        map = new MiniMap();
+
+        // frame.addComponentListener(new ComponentAdapter() {
+        //     public void componentResized(ComponentEvent componentEvent) {
+        //         // do stuff
+        //         componentEvent.
+        //     }
+        // });
 
         this.setFocusable(true);
     }
@@ -70,6 +80,8 @@ public class Screen extends JPanel implements ActionListener {
                 10,
                 20
             );
+
+            map.render(g, clientUpdateInfo.getHeadPosition());
         }
         // if (everything.size() > 0) {
         //     for ()
@@ -87,7 +99,7 @@ public class Screen extends JPanel implements ActionListener {
     }
 
     public void poll() throws IOException {
-        String hostName = "10.0.0.88";
+        String hostName = "10.0.0.238";
         int portNumber = 1024;
         System.out.println("x");
         Socket serverSocket = new Socket(hostName, portNumber);
