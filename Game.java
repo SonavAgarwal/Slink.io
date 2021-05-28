@@ -67,24 +67,7 @@ public class Game implements Serializable {
     public void spawnFood() {
         if (foodCount > 500) return;
         try {
-            Position randomPosition = new Position(
-                (int) (
-                    Math.random() *
-                    Configuration.worldWidth *
-                    Configuration.gridSquareWidth *
-                    2 -
-                    Configuration.worldWidth *
-                    Configuration.gridSquareWidth
-                ),
-                (int) (
-                    Math.random() *
-                    Configuration.worldWidth *
-                    Configuration.gridSquareWidth *
-                    2 -
-                    Configuration.worldWidth *
-                    Configuration.gridSquareWidth
-                )
-            );
+            Position randomPosition = Tools.randomWorldPosition();
             if (randomPosition.distanceTo(new Position(0, 0)) + 100 < Configuration.worldWidth * Configuration.gridSquareWidth) {
                 int randomSize = (int) (Math.random() * 3 + 2);
                 grid.get(randomPosition.quantized()).addFood(new Food(randomPosition, Color.white, randomSize));

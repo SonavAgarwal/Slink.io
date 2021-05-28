@@ -178,12 +178,12 @@ public class Snake implements Serializable {
     public void spawn() {
         color = new Color((int) (Math.random() * 0x1000000));
 
-        headPosition = new Position(0, 0);
+        headPosition = Tools.randomWorldPosition();
         currentAngle = 0;
         lastChangeDirection = 1;
 
-        addRib(new SnakeRib(new Position(0, 0), color, clientID, 20));
-        addRib(new SnakeRib(new Position(0, -10), color, clientID, 20));
+        addRib(new SnakeRib(headPosition.copy(), color, clientID, 20));
+        // addRib(new SnakeRib(new Position(0, -10), color, clientID, 20));
         dead = false;
         size = 200;
 
