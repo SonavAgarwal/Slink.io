@@ -194,7 +194,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     }
 
     public void poll() throws IOException {
-        String hostName = "192.168.50.106";
+        String hostName = "10.210.66.64";
         int portNumber = 1024;
         System.out.println("x");
         Socket serverSocket = new Socket(hostName, portNumber);
