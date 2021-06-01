@@ -6,6 +6,8 @@ public class Configuration {
     static final int inputTime = 30;
     static final int worldWidth = 20;
     static final int gridSquareWidth = 100;
+    static final int maxFood = 700;
+
     static final int snakeSpeed = 8;
     static final int snakeBoostSpeed = 8;
 

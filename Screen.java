@@ -4,16 +4,24 @@ import java.io.*;
 import java.net.*;
 // import java.util.*;
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
 
 public class Screen extends JPanel implements ActionListener, KeyListener {
 
     private Color backgroundColor = new Color(20, 20, 20);
+    private Color overlayColor = new Color(255, 255, 255, 30);
     private Color fontColor = new Color(77, 77, 77);
     private Font font = new Font("Arial", Font.BOLD, 15);
 
     private JButton playButton;
     private JTextField nameInput;
+
+    private JLabel instructionsLabel;
+    private JLabel instructionsLabel1;
+    private JLabel instructionsLabel2;
+    private JLabel instructionsLabel3;
+    private JLabel gameNameLabel;
+
+    private DLList<JComponent> jComponents;
 
     ObjectOutputStream out = null;
     // private Game game;
@@ -24,6 +32,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
 
     private DLList<GridTile> gridTiles;
     private MiniMap map;
+
+    private boolean instructed = false;
 
     public Screen() {
         setLayout(null);
@@ -41,6 +51,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
 
         map = new MiniMap();
 
+        jComponents = new DLList<JComponent>();
+
         playButton = new JButton();
         playButton.setFont(new Font("Arial", Font.BOLD, 20));
         playButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -56,6 +68,55 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
         nameInput.setBounds(310, 186, 200, 30);
         nameInput.setText("Name...");
         this.add(nameInput);
+
+        instructionsLabel = new JLabel();
+        instructionsLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        instructionsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        instructionsLabel.setBounds(255, 313, 300, 30);
+        instructionsLabel.setText("Instructions:");
+        this.add(instructionsLabel);
+
+        instructionsLabel1 = new JLabel();
+        instructionsLabel1.setFont(new Font("Arial", Font.PLAIN, 20));
+        instructionsLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+        instructionsLabel1.setBounds(255, 356, 300, 30);
+        instructionsLabel1.setText("- click / space to sprint");
+        this.add(instructionsLabel1);
+
+        instructionsLabel2 = new JLabel();
+        instructionsLabel2.setFont(new Font("Arial", Font.PLAIN, 20));
+        instructionsLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+        instructionsLabel2.setBounds(255, 396, 300, 30);
+        instructionsLabel2.setText("- move mouse and eat food");
+        this.add(instructionsLabel2);
+
+        instructionsLabel3 = new JLabel();
+        instructionsLabel3.setFont(new Font("Arial", Font.PLAIN, 20));
+        instructionsLabel3.setHorizontalAlignment(SwingConstants.CENTER);
+        instructionsLabel3.setBounds(255, 436, 300, 30);
+        instructionsLabel3.setText("- avoid other snakes and walls");
+        this.add(instructionsLabel3);
+
+        gameNameLabel = new JLabel();
+        gameNameLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        gameNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gameNameLabel.setBounds(255, 80, 300, 50);
+        gameNameLabel.setText("Slink");
+        this.add(gameNameLabel);
+
+        instructionsLabel.setForeground(Color.white);
+        instructionsLabel1.setForeground(Color.white);
+        instructionsLabel2.setForeground(Color.white);
+        instructionsLabel3.setForeground(Color.white);
+        gameNameLabel.setForeground(Color.white);
+
+        jComponents.add(playButton);
+        jComponents.add(nameInput);
+        jComponents.add(instructionsLabel);
+        jComponents.add(instructionsLabel1);
+        jComponents.add(instructionsLabel2);
+        jComponents.add(instructionsLabel3);
+        jComponents.add(gameNameLabel);
 
         // frame.addComponentListener(new ComponentAdapter() {
         //     public void componentResized(ComponentEvent componentEvent) {
@@ -82,12 +143,16 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
 
         if (clientUpdateInfo != null) {
             if (clientUpdateInfo.getDead()) {
-                playButton.setVisible(true);
-                nameInput.setVisible(true);
+                for (JComponent jc : jComponents) {
+                    jc.setVisible(true);
+                }
             } else {
-                playButton.setVisible(false);
-                nameInput.setVisible(false);
+                for (JComponent jc : jComponents) {
+                    jc.setVisible(false);
+                }
+                instructed = true;
             }
+
             for (GridTile gt : gridTiles) {
                 gt.render(g, clientUpdateInfo.getHeadPosition());
             }
@@ -97,20 +162,14 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
 
             g.setColor(fontColor);
             g.setFont(font);
-            g.drawString(
-                "Size: " +
-                clientUpdateInfo.getSize() +
-                ", Position: " +
-                clientUpdateInfo.getHeadPosition().toString() +
-                ", Angle: " +
-                clientUpdateInfo.get("snakeAngle") +
-                ", ma: " +
-                clientUpdateInfo.get("mouseAngle"),
-                10,
-                20
-            );
+            g.drawString("Size: " + clientUpdateInfo.getSize() + ", Position: " + clientUpdateInfo.getHeadPosition().toString(), 10, 20);
 
-            map.render(g, clientUpdateInfo.getHeadPosition());
+            map.render(g, clientUpdateInfo.getHeadPosition(), clientUpdateInfo.getMapObjects());
+
+            if (clientUpdateInfo.getDead()) {
+                g.setColor(overlayColor);
+                g.fillRect(0, 0, 2000, 2000);
+            }
         }
         // if (everything.size() > 0) {
         //     for ()
@@ -128,12 +187,14 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     public void recordInput(ObjectOutputStream out) {
         Runnable inputRecorder = new InputRecorder(this, out);
 
+        this.addKeyListener((KeyListener) inputRecorder);
+
         Thread inputRecorderThread = new Thread(inputRecorder);
         inputRecorderThread.start();
     }
 
     public void poll() throws IOException {
-        String hostName = "10.210.66.64";
+        String hostName = "192.168.50.106";
         int portNumber = 1024;
         System.out.println("x");
         Socket serverSocket = new Socket(hostName, portNumber);
@@ -225,7 +286,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     public void keyReleased(KeyEvent e) {}
 }
 
-class InputRecorder implements Runnable, MouseListener {
+class InputRecorder implements Runnable, MouseListener, KeyListener {
 
     JPanel jPanel;
     ObjectOutputStream out;
@@ -282,5 +343,22 @@ class InputRecorder implements Runnable, MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         boosting = false;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_SPACE) {
+            boosting = true;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_SPACE) {
+            boosting = false;
+        }
     }
 }

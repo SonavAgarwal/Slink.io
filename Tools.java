@@ -25,4 +25,12 @@ public class Tools {
         );
         return randomPosition;
     }
+
+    public static boolean positionIsInWorld(Position p) {
+        int maxW = Configuration.worldWidth * Configuration.gridSquareWidth;
+        if (p.getX() < -1 * maxW || p.getX() > maxW || p.getY() < -1 * maxW || p.getY() > maxW) {
+            return false;
+        }
+        return true;
+    }
 }

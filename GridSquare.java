@@ -7,6 +7,7 @@ public class GridSquare extends WorldObject implements Serializable {
     private final int width = 100;
 
     private DLList<Food> foods;
+    private DLList<Bot> bots;
     private DLList<SnakeRib> snakeRibs;
 
     private Game game;
@@ -15,6 +16,7 @@ public class GridSquare extends WorldObject implements Serializable {
         position = p;
         snakeRibs = new DLList<SnakeRib>();
         foods = new DLList<Food>();
+        bots = new DLList<Bot>();
         game = g;
     }
 
@@ -38,6 +40,14 @@ public class GridSquare extends WorldObject implements Serializable {
         snakeRibs.remove(sr);
     }
 
+    public void addBot(Bot b) {
+        bots.add(b);
+    }
+
+    public void removeBot(Bot b) {
+        bots.remove(b);
+    }
+
     public void checkHead(Snake snake, SnakeRib headRib) {
         for (Food f : foods) {
             if (headRib.getPosition().distanceTo(f.getPosition()) < 40) {
@@ -50,6 +60,12 @@ public class GridSquare extends WorldObject implements Serializable {
                 if (headRib.getPosition().distanceTo(sr.getPosition()) < 10) {
                     snake.die();
                 }
+            }
+        }
+        for (Bot b : bots) {
+            if (headRib.getPosition().distanceTo(b.getPosition()) < 40) {
+                b.die();
+                snake.grow(50);
             }
         }
     }

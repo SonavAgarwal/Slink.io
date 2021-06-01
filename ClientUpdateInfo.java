@@ -3,6 +3,7 @@ import java.io.Serializable;
 public class ClientUpdateInfo implements Serializable {
 
     private DLList<WorldObject> everything;
+    private DLList<Position> mapObjects;
     private Position headPosition;
     private boolean dead;
     private int size;
@@ -19,6 +20,14 @@ public class ClientUpdateInfo implements Serializable {
 
     public DLList<WorldObject> getEverything() {
         return everything;
+    }
+
+    public void setMapObjects(DLList<Position> mO) {
+        this.mapObjects = mO;
+    }
+
+    public DLList<Position> getMapObjects() {
+        return mapObjects;
     }
 
     public void setHeadPosition(Position headPosition) {

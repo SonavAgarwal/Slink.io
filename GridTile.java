@@ -3,7 +3,7 @@ import java.awt.*;
 public class GridTile extends WorldObject {
 
     private Position position;
-    private Color color = new Color(176, 176, 176);
+    private Color color = new Color(130, 130, 130);
 
     public GridTile(Position p) {
         position = p;

@@ -4,13 +4,19 @@ import java.io.Serializable;
 public class Game implements Serializable {
 
     private DLList<Snake> snakes;
+    private DLList<Bot> bots;
     private HashMap<Position, GridSquare> grid;
 
     private int foodCount;
 
     public Game() {
         snakes = new DLList<Snake>();
+        bots = new DLList<Bot>();
         grid = new HashMap<Position, GridSquare>();
+
+        for (int i = 0; i < 5; i++) {
+            bots.add(new Bot());
+        }
 
         for (int i = -Configuration.worldWidth; i <= Configuration.worldWidth; i++) { //TODO think
             for (int j = -Configuration.worldWidth; j <= Configuration.worldWidth; j++) { //TODO think more
@@ -61,11 +67,23 @@ public class Game implements Serializable {
         for (Snake s : snakes) {
             s.tick();
         }
+
+        // System.out.println("ticin");
+        // System.out.println(bots);
+        try {
+            if (bots != null) {
+                for (Bot b : bots) {
+                    b.tick(this);
+                }
+            }
+        } catch (Exception eeeee) {
+            System.out.println(eeeee);
+        }
         // food spawn algorithm
     }
 
     public void spawnFood() {
-        if (foodCount > 500) return;
+        if (foodCount > Configuration.maxFood) return;
         try {
             Position randomPosition = Tools.randomWorldPosition();
             if (randomPosition.distanceTo(new Position(0, 0)) + 100 < Configuration.worldWidth * Configuration.gridSquareWidth) {
@@ -116,7 +134,18 @@ public class Game implements Serializable {
         for (Snake s : snakes) {
             if (!s.getDead()) everything.add(s.getNameObject());
         }
+        for (Bot b : bots) {
+            if (!b.getDead()) everything.add(b);
+        }
         return everything;
+    }
+
+    public DLList<Position> getMapPositions() {
+        DLList<Position> mapPositions = new DLList<Position>();
+        for (Bot b : bots) {
+            mapPositions.add(b.getPosition());
+        }
+        return mapPositions;
     }
 
     public void increaseFoodCount() {

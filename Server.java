@@ -20,6 +20,7 @@ class ServerHandler {
     private Game game;
 
     private DLList<WorldObject> everything;
+    private DLList<Position> mapPositions;
 
     public ServerHandler() {
         clientCount = 0;
@@ -56,6 +57,7 @@ class ServerHandler {
                     }
 
                     everything = game.getEverything();
+                    mapPositions = game.getMapPositions();
                     // for (ClientHandler ch : clients) {
 
                     //     ch.updateClient(everything);
@@ -70,6 +72,10 @@ class ServerHandler {
 
     public DLList<WorldObject> getEverything() {
         return everything;
+    }
+
+    public DLList<Position> getMapPositions() {
+        return mapPositions;
     }
 
     public void start() throws IOException {
@@ -136,7 +142,7 @@ class ClientHandler implements Runnable {
         // System.out.println("snake tick");
     }
 
-    public void updateClient(DLList<WorldObject> everything) {
+    public void updateClient(DLList<WorldObject> everything, DLList<Position> mapPositions) {
         try {
             out.reset();
             ClientUpdateInfo cui = new ClientUpdateInfo();
@@ -145,6 +151,7 @@ class ClientHandler implements Runnable {
             cui.setDead(snake.getDead());
             cui.set("snakeAngle", snake.getCurrentAngle());
             cui.set("mouseAngle", snake.getMouangsav());
+            cui.setMapObjects(mapPositions); // last
             cui.setEverything(everything); // last
             out.writeObject(cui);
         } catch (Exception e) {
@@ -169,7 +176,7 @@ class ClientHandler implements Runnable {
                             ClientInput incomingInput = (ClientInput) incoming;
                             latestInput = incomingInput;
                             ticksWithoutInput = 0;
-                            updateClient(serverHandler.getEverything());
+                            updateClient(serverHandler.getEverything(), serverHandler.getMapPositions());
                         } else if (incoming.getClass() == ServerUpdateInfo.class) {
                             ServerUpdateInfo sui = (ServerUpdateInfo) incoming;
 
