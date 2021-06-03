@@ -8,18 +8,20 @@ public class MiniMap {
         g.setColor(color);
         g.fillRect(710, 410, 80, 80);
 
-        int x = 40 * pos.getX() / (Configuration.worldWidth * Configuration.gridSquareWidth);
-        int y = 40 * pos.getY() / (Configuration.worldWidth * Configuration.gridSquareWidth);
-
-        g.setColor(Color.white);
-        g.drawOval(750 + x, 450 + y, 2, 2);
+        int x, y;
 
         for (Position p : mapPositions) {
             x = 40 * p.getX() / (Configuration.worldWidth * Configuration.gridSquareWidth);
             y = 40 * p.getY() / (Configuration.worldWidth * Configuration.gridSquareWidth);
-
+            
             g.setColor(Color.gray);
             g.drawOval(750 + x, 450 + y, 2, 2);
         }
+
+        x = 40 * pos.getX() / (Configuration.worldWidth * Configuration.gridSquareWidth);
+        y = 40 * pos.getY() / (Configuration.worldWidth * Configuration.gridSquareWidth);
+
+        g.setColor(Color.white);
+        g.drawOval(750 + x, 450 + y, 2, 2);
     }
 }

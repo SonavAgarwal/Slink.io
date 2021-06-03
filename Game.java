@@ -145,6 +145,9 @@ public class Game implements Serializable {
         for (Bot b : bots) {
             mapPositions.add(b.getPosition());
         }
+        for (Snake s : snakes) {
+            mapPositions.add(s.getHeadPosition());
+        }
         return mapPositions;
     }
 
